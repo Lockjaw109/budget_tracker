@@ -26,15 +26,13 @@ typedef struct transaction {
   type_e type;
 } transaction_t;
 
-extern int read_transactions(char *);
-extern int write_transactions(char *);
+extern int read_transactions(const char *);
+extern int write_transactions(const char *);
 extern int delete_transaction(transaction_t *);
 extern int insert_transaction(transaction_t *);
 extern int view_transactions(void);
 extern transaction_t *search_transactions(void);
 extern int sort_transactions(void);
-
-extern int return_one(void);
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "database.h"
 
 /*
@@ -20,12 +22,13 @@ int g_count; // total transactions stored
  * Purpose: Read in data to transaction_t structs and store in a global
  *          array.
  *
- * INPUT: char *filename - file where data is stored
+ * INPUT: const char *filename - file where data is stored
  *
  * OUTPUT: int SUCCESS or ERROR
  */
 
-int read_transactions(char *filename) {
+int read_transactions(const char *filename) {
+  assert(g_transactions == NULL);
   FILE *fp = NULL;
 
   fp = fopen(filename, "r");
@@ -51,6 +54,34 @@ int read_transactions(char *filename) {
   return SUCCESS;
 } /* read_transactions() */
 
-int return_one() {
-  return 1;
-}
+/*
+ * write_transactions()
+ *
+ * Purpose: Write data from global array to output file
+ *
+ * INPUT: const char *filename
+ *
+ * OUTPUT: int SUCCESS or ERROR
+ */
+
+int write_transactions(const char *filename) {
+  assert(g_transactions != NULL);
+  FILE *fp = NULL;
+
+  fp = fopen(filename, "w");
+  if (fp = NULL) {
+    return WRITE_ERR;
+  }
+
+  fprintf(fp, "%d\n", g_count);
+
+  int status = fwrite(g_transactions, sizeof(transaction_t), g_count, fp);
+  if (status != g_count) {
+    return WRITE_ERR;
+  }
+
+  free(g_transactions);
+  g_transactions = NULL;
+
+  return SUCCESS;
+} /* write_transactions() */
