@@ -1,6 +1,10 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,23 +15,29 @@
 
 #define INIT_SIZE (20) // Initial size of array for transactions
 
-enum type {
-  PAYROLL, GIFT, OTHER, // Income types
-  FOOD, SHOPPING, SUBSCRIPTION, ENTERTAINMENT, GIFT, OTHER // Expense types
-}
+typedef enum type {
+  PAYROLL, GIFT_I, OTHER_I, // Income types
+  FOOD, SHOPPING, SUBSCRIPTION, ENTERTAINMENT, GIFT_E, OTHER_E // Expense types
+} type_e;
 
 typedef struct transaction {
   float value;
   int date; // stored as YYYYMMDD
-  enum type;
+  type_e type;
 } transaction_t;
 
-int read_transactions(char *);
-int write_transactions(char *);
-int delete_transaction(transaction_t *);
-int insert_transaction(transaction_t *);
-int view_transactions(void);
-transaction_t *search_transactions(void);
-int sort_transactions(void);
+extern int read_transactions(char *);
+extern int write_transactions(char *);
+extern int delete_transaction(transaction_t *);
+extern int insert_transaction(transaction_t *);
+extern int view_transactions(void);
+extern transaction_t *search_transactions(void);
+extern int sort_transactions(void);
+
+extern int return_one(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // DATABASE_H

@@ -50,3 +50,7 @@ int read_transactions(char *filename) {
 
   return SUCCESS;
 } /* read_transactions() */
+
+int return_one() {
+  return 1;
+}
