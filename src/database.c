@@ -43,11 +43,15 @@ int read_transactions(const char *filename) {
 
   temp = malloc(count * sizeof(transaction_t));
   if (temp == NULL) {
+    fclose(fp);
+    fp = NULL;
     return MEM_ERR;
   }
 
   int status = fread(temp, sizeof(transaction_t), count, fp);
   if (status != count) {
+    fclose(fp);
+    fp = NULL;
     return READ_ERR;
   }
 
@@ -77,11 +81,78 @@ int write_transactions(const char *filename) {
 
   int status = fwrite(g_transactions, sizeof(transaction_t), g_count, fp);
   if (status != g_count) {
+    fclose(fp);
+    fp = NULL;
     return WRITE_ERR;
   }
 
   free(g_transactions);
   g_transactions = NULL;
 
+  fclose(fp);
+  fp = NULL;
   return SUCCESS;
 } /* write_transactions() */
+
+/*
+ * insert_transaction()
+ *
+ * Purpose: Insert transaction into global array
+ *
+ * INPUT: transaction_t transaction
+ *
+ * OUTPUT: int SUCCESS or ERROR
+ */
+
+int insert_transaction(transaction_t transaction) {
+  if (g_transactions == NULL) {
+    return IN_ERR;
+  }
+
+  int index = (g_count + 1); // TODO: fix insert
+
+  if (index == (g_size / 2)) {
+    // resize g_transactions
+  }
+
+  g_transactions[index] = transaction;
+  g_count++;
+  return SUCCESS;
+} /* insert_transaction() */
+
+/*
+ * delete_transaction()
+ *
+ * Purpose: Remove the transaction with the given ID
+ *
+ * INPUT: unsigned long id
+ *
+ * OUTPUT: int SUCCESS or ERROR
+ */
+
+int delete_transaction(unsigned long id) {
+  return SUCCESS;
+} /* delete_transaction() */
+
+/*
+ * view_transactions()
+ *
+ * Purpose: Print out the array structure of g_transactions
+ *
+ * INPUT: None
+ *
+ * OUTPUT: CLI print
+ */
+
+int view_transactions(void) {
+  assert(g_transactions != NULL);
+
+  unsigned long id = g_transactions[i].id;
+  float value = g_transactions[i].value;
+  int date = g_transactions[i].date;'
+
+  for (int i = 0; i < g_count; i++) {
+    printf("%lu | $%.2f | %d / %d / %d\n", id, value,
+          (date / 10000), (date % 1000), (date % 100)); // how to do date??
+  }
+} /* view_transactions() */
