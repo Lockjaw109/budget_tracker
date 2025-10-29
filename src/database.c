@@ -106,10 +106,17 @@ int write_transactions(const char *filename) {
 
 int insert_transaction(transaction_t transaction) {
   if (g_transactions == NULL) {
-    return IN_ERR;
+    int state = init_db();
+    if (state != SUCCESS) {
+      return state;
+    }
   }
 
-  int index = (g_count + 1); // TODO: fix insert
+  int index = (g_count + 1); 
+
+  if (index > (g_size - 1)) {
+    return IN_ERR;
+  } // TODO: fix insert
 
   if (index == (g_size / 2)) {
     // resize g_transactions
@@ -147,12 +154,39 @@ int delete_transaction(unsigned long id) {
 int view_transactions(void) {
   assert(g_transactions != NULL);
 
-  unsigned long id = g_transactions[i].id;
-  float value = g_transactions[i].value;
-  int date = g_transactions[i].date;'
-
   for (int i = 0; i < g_count; i++) {
+    unsigned long id = g_transactions[i].id;
+    float value = g_transactions[i].value;
+    int date = g_transactions[i].date;
+    int year = date / 10000;
+    int month = (date % 10000) / 100;
+    int day = (date % 10000) % 100;
+
     printf("%lu | $%.2f | %d / %d / %d\n", id, value,
-          (date / 10000), (date % 1000), (date % 100)); // how to do date??
+          year, month, day);
   }
 } /* view_transactions() */
+
+/*
+ * init_db()
+ *
+ * Purpose: Initialize the database, creating minimum size array
+ *
+ * INPUT: None
+ *
+ * OUTPUT: SUCCESS or ERROR
+ */
+
+int init_db() {
+  g_count = 0;
+  g_size = INIT_SIZE;
+
+  transaction_t *temp = NULL;
+  temp = malloc(g_size * sizeof(transaction_t));
+  if (temp == NULL) {
+    return MEM_ERR;
+  }
+
+  g_transactions = temp;
+  return SUCCESS;
+} /* init_db() */

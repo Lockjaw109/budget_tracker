@@ -35,6 +35,7 @@ extern int insert_transaction(transaction_t);
 extern int view_transactions(void);
 extern transaction_t *search_transactions(void);
 extern int sort_transactions(void);
+extern int init_db(void);
 
 #ifdef __cplusplus
 }
